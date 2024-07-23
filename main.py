@@ -24,6 +24,7 @@ def is_arioch():
 @bot.slash_command(name='adduser', description='Add a user to the database')
 @is_arioch()
 async def adduser(ctx, username: str):
+    username = username.lower()
     query = { "username": username }
     doc = coinscol.find_one(query)
     if doc != None:
@@ -37,6 +38,7 @@ async def adduser(ctx, username: str):
 @bot.slash_command(name='removeuser', description='Remove a user from the database')
 @is_arioch()
 async def removeuser(ctx, username: str):
+    username = username.lower()
     query = { "username": username }
     doc = coinscol.find_one(query)
     if doc == None:
