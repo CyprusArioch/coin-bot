@@ -23,14 +23,15 @@ def is_arioch():
 
 @bot.slash_command(name='adduser', description='Add a user to the database')
 @is_arioch()
-async def adduser(ctx, username: str):
+async def adduser(ctx, username: str, member: discord.Member):
+    discordid = member.id
     username = username.lower()
-    query = { "username": username }
+    query = { "discordid": discordid }
     doc = coinscol.find_one(query)
     if doc != None:
         await ctx.respond("This user has already been added.", ephemeral=True)
         return
-    newuser = { "username": username, "coins": 0 }
+    newuser = { "discordid": discordid, "username": username, "coins": 0 }
     temp = coinscol.insert_one(newuser)
     await ctx.respond(f"User '{username}' has been added.", ephemeral=True)
 
@@ -61,6 +62,7 @@ async def view(ctx, username: str):
     await ctx.respond(embed=embed)
 
 @bot.slash_command(name="addcoins", description="Give coins to a user")
+@is_arioch()
 async def addcoins(ctx, username: str, coins: float):
     username = username.lower()
     query = { "username": username }
@@ -74,6 +76,7 @@ async def addcoins(ctx, username: str, coins: float):
     await ctx.respond(f"{str(coins)} coins given to {username}")
 
 @bot.slash_command(name="removecoins", description="Remove coins from a user")
+@is_arioch()
 async def removecoins(ctx, username: str, coins: float):
     username = username.lower()
     query = { "username": username }
@@ -87,6 +90,7 @@ async def removecoins(ctx, username: str, coins: float):
     await ctx.respond(f"{str(coins)} coins removed from {username}")
 
 @bot.slash_command(name="setcoins", description="Set a users coins")
+@is_arioch()
 async def setcoins(ctx, username: str, coins: float):
     username = username.lower()
     query = { "username": username }
@@ -98,6 +102,11 @@ async def setcoins(ctx, username: str, coins: float):
     newvalue = { "$set": { "coins": newcoins } }
     coinscol.update_one(query, newvalue)
     await ctx.respond(f"{username} has had their coins set to {str(newcoins)}")
+
+@bot.slash_command(name="viewall", description="View all users and their amounts")
+async def viewall(ctx):
+    pass
+
 
 @bot.event
 async def on_application_command_error(ctx, error):
