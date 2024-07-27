@@ -123,5 +123,8 @@ async def on_application_command_error(ctx, error):
     if isinstance(error, NotAuthorized):
         await ctx.respond(error, ephemeral=True)
         return
+    else:
+        await ctx.respond(error)
+        return
 
 bot.run(getenv("BOT_TOKEN"))
