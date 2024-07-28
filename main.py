@@ -46,7 +46,8 @@ async def removeuser(ctx, member: discord.Member):
         await ctx.respond("This user does not exist.", ephemeral=True)
         return
     coinscol.delete_one(query)
-    await ctx.respond(f"User {doc.username} has been deleted.", ephemeral=True)
+    username = doc["username"]
+    await ctx.respond(f"User {username} has been deleted.", ephemeral=True)
     return
 
 @bot.slash_command(name='viewcoins', description='View coins for a user')
@@ -59,7 +60,8 @@ async def viewcoins(ctx, member: discord.Member):
     if doc == None:
         await ctx.respond("User does not exist.", ephemeral=True)
         return
-    embed = discord.Embed(title=f"{doc.username}'s Coins", description=f"Discord ID: {str(discordid)}")
+    username = doc["username"]
+    embed = discord.Embed(title=f"{username}'s Coins", description=f"Discord ID: {str(discordid)}")
     embed.add_field(name="Coins", value=str(doc["coins"]))
     await ctx.respond(embed=embed)
 
@@ -75,7 +77,8 @@ async def addcoins(ctx, member: discord.Member, coins: float):
     newcoins = doc["coins"] + coins
     newvalue = { "$set": { "coins": newcoins } }
     coinscol.update_one(query, newvalue)
-    await ctx.respond(f"{str(coins)} coins given to {doc.username}")
+    username = doc["username"]
+    await ctx.respond(f"{str(coins)} coins given to {username}")
 
 @bot.slash_command(name="removecoins", description="Remove coins from a user")
 @is_arioch()
@@ -89,7 +92,8 @@ async def removecoins(ctx, member: discord.Member, coins: float):
     newcoins = doc["coins"] - coins
     newvalue = { "$set": { "coins": newcoins } }
     coinscol.update_one(query, newvalue)
-    await ctx.respond(f"{str(coins)} coins removed from {doc.username}")
+    username = doc["username"]
+    await ctx.respond(f"{str(coins)} coins removed from {username}")
 
 @bot.slash_command(name="setcoins", description="Set a users coins")
 @is_arioch()
@@ -103,7 +107,8 @@ async def setcoins(ctx, member: discord.Member, coins: float):
     newcoins = coins
     newvalue = { "$set": { "coins": newcoins } }
     coinscol.update_one(query, newvalue)
-    await ctx.respond(f"{doc.username} has had their coins set to {str(newcoins)}")
+    username = doc["username"]
+    await ctx.respond(f"{username} has had their coins set to {str(newcoins)}")
 
 @bot.slash_command(name="viewall", description="View all users and their coin amounts")
 @is_arioch()
