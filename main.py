@@ -1,5 +1,4 @@
 import nest_asyncio
-import asyncio
 nest_asyncio.apply()
 import discord
 import discord.ext.commands as commands
