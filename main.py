@@ -32,7 +32,7 @@ async def adduser(ctx, member: discord.Member, username: str):
         await ctx.respond("This user has already been added.", ephemeral=True)
         return
     newuser = { "discordid": discordid, "username": username, "coins": 0 }
-    temp = coinscol.insert_one(newuser)
+    coinscol.insert_one(newuser)
     await ctx.respond(f"User '{username}' has been added.", ephemeral=True)
 
 @bot.slash_command(name='removeuser', description='Remove a user from the database')
