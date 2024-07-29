@@ -26,7 +26,6 @@ def is_arioch():
 @is_arioch()
 async def adduser(ctx, member: discord.Member, username: str):
     discordid = member.id
-    username = username.lower()
     query = { "discordid": discordid }
     doc = coinscol.find_one(query)
     if doc != None:
